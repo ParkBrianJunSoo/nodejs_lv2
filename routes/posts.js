@@ -47,7 +47,7 @@ router.get('/', async (req, res) => {
 router.get('/:postId', async (req, res) => {
     try {
         const { postId } = req.params;
-        const post = await Posts.findOne({_id:postId});
+        const post = await Posts.findOne({ _id: postId });
         const result = {
             postId: post.postId,
             userId: post.userId,
@@ -73,12 +73,12 @@ router.put('/:postId', authMiddleware, async (req, res) => {
         const { title, content } = req.body;
 
         const [post] = await Posts.find({ _id: postId });
-        
-        if (title.length===0) {
-            return res.status(412).json({ errorMessage: "게시글 제목의 형식이 일치하지 않습니다."})
+
+        if (title.length === 0) {
+            return res.status(412).json({ errorMessage: "게시글 제목의 형식이 일치하지 않습니다." })
         }
-        if (content.length===0) {
-            return res.status(412).json({ errorMessage: "게시글 내용의 형식이 일치하지 않습니다."})
+        if (content.length === 0) {
+            return res.status(412).json({ errorMessage: "게시글 내용의 형식이 일치하지 않습니다." })
         }
         if (userId === post.userId) {
             const date = new Date();
@@ -99,13 +99,13 @@ router.delete('/:postId', authMiddleware, async (req, res) => {
     try {
         const { userId } = res.locals.user;
         const { postId } = req.params;
-        
+
         const post = await Posts.findOne({ _id: postId });
 
         if (!post) {
             return res.status(404).json({ message: '게시글이 존재하지 않습니다.' });
         }
-        
+
         if (userId === post.userId) {
             await Posts.deleteOne({ _id: postId })
             return res.status(200).json({ message: '게시글을 삭제하였습니다.' });
